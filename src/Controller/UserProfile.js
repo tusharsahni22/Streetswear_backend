@@ -7,7 +7,7 @@ function updateUserProfile(req, res) {
  
   User.findByIdAndUpdate(id, { name, mobilenumber ,password }, { new: true })
     .then((result) => {
-      res.status(200).json(result);
+      res.status(200).json({ message: 'User profile updated successfully'});
     })
     .catch(error => {
       res.status(500).json({ error: error.message });
