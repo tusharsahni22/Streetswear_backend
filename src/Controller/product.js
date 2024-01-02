@@ -28,4 +28,17 @@ const viewProduct = (req, res) => {
 
 }
 
-module.exports = { addProduct, viewProduct };
+const addProductImage = (req, res) => {
+    const pic  = req.files;
+    if (!pic ) {
+        res.status(400).send({ message: "Content can not be empty! Upload picture" });
+        return;
+    }
+
+  console.log("pictures",pic)
+  res.send({ message: "Image uploaded successfully" });
+
+
+}
+
+module.exports = { addProduct, viewProduct ,addProductImage};
