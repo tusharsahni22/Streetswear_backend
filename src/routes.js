@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: function(req, file, cb){
-        cb(null, Date.now() + Date.now() + file.originalname );
+        cb(null, Date.now() + file.originalname );
     }
 });
 const upload = multer({ storage: storage });
@@ -27,9 +27,9 @@ router.route('/signup').post(signup);
 router.route('/login').post(login);
 
 // Routes for Product Page
-router.route('/addProduct').post(addProduct);
+// router.route('/addProduct').post(addProduct);
 router.route('/viewProduct').post(viewProduct);
-router.route('/uploadPicture').post(upload.array('pic',5) ,addProductImage);
+router.route('/uploadPicture').post(upload.single('pic') ,addProductImage,addProduct);
 
 //protected routes for profile page
 router.route('/updateUser').post(authMiddleware,updateUserProfile);
