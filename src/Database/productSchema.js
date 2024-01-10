@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    pic:{
+    mainPicture:{
         type: String,
         required: true,
     },
@@ -26,9 +26,16 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     stock:{
-        type: Boolean,
+        type: Number,
         required: true,
-    }
+    },
+    altPictures: [
+        {
+            type: String,
+            required: true,
+        }
+    ]
+
     });
 
 module.exports = mongoose.model('Product', productSchema);

@@ -1,6 +1,6 @@
 const productSchema = require('../Database/productSchema');
 const {S3Client, GetObjectCommand, PutObjectCommand}  = require('@aws-sdk/client-s3');
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const fs = require('fs');
 const { ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME } = process.env;
 const s3Client = new S3Client({
@@ -10,18 +10,77 @@ const s3Client = new S3Client({
         secretAccessKey: SECRET_ACCESS_KEY,
     },
 });
-const key = 'Beige Aesthetic Fashion Clothing Collection Medium Banner.png';
+
+
+const  addProductImage = async (req, res ,next) => {
+    const mainPicture  = req.files["pic"][0];
+    const AltPictures = req.files["altpicture"];
+    const { title } = JSON.parse(req.body.product);
+    const key = "upload/"+title+"/"+mainPicture.filename;
+    const AltPickey = "upload/"+title+"/"+AltPictures.filename;
+    let altPic1,altPic2;
+    // console.log(mainPicture)
+    if (!mainPicture || !AltPictures) {
+        res.status(400).send({ message: "Content can not be empty! Upload picture" });
+        return;
+    }
+    const command = new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        Body: fs.createReadStream(mainPicture.path),
+        ContentType: mainPicture.mimetype,
+    
+    });
+    
+    try {
+        const data = await s3Client.send(command);
+
+        for (let i = 0; i < AltPictures.length; i++) {
+            const altPic = AltPictures[i];
+            const AltPickey = "upload/"+title+"/"+altPic.filename;
+            // console.log(AltPickey);
+    
+            const commandForAltPic = new PutObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: AltPickey,
+                Body: fs.createReadStream(altPic.path),
+                ContentType: altPic.mimetype,
+            
+            });
+            const dataAltPic = await s3Client.send(commandForAltPic);
+            if(i==0){
+
+                altPic1 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+            }
+            if(i==1){
+                altPic2 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+            }
+        }
+        const cloudFrontURL = `https://d1ow83a3vk82qz.cloudfront.net/${key}`;
+        // All three links are ready to be saved in the the req.mainPicture, req.altPic1, req.altPic2
+        req.mainPicture = cloudFrontURL;
+        req.altPic1 = altPic1;
+        req.altPic2 = altPic2;
+        
+    } catch (error) {
+        console.log("Error", error);
+        return res.status(500).send({ message: "Error in uploading image" });
+    }
+    next();
+
+}
 
 const addProduct = (req, res) => {
     const productdetail = JSON.parse(req.body.product);
     const { title, price, size, description, specification, stock } = productdetail;
-    const pic = req.image;
-    if (!title || !price || !pic || !size || !description || !specification || !stock) {
+    const mainPicture = req.mainPicture;
+    const altPictures = [req.altPic1, req.altPic2];
+    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures) {
         res.status(400).send({ message: "Content can not be empty! Enter all details" });
         return;
     }
 
-    const product = new productSchema({ title, price, pic, size, description, specification, stock });
+    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, altPictures});
     product.save(product)
         .then(data => {
             res.send(data);
@@ -39,37 +98,6 @@ const viewProduct = (req, res) => {
         .catch(err => {
             res.status(500).send({ message: err.message || "Error Occured" });
         });
-
-}
-
-const  addProductImage = async (req, res ,next) => {
-    const pic  = req.file;
-    console.log(pic)
-    if (!pic ) {
-        res.status(400).send({ message: "Content can not be empty! Upload picture" });
-        return;
-    }
-    const command = new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: `upload/${pic.filename}`,
-        Body: fs.createReadStream("./uploads/"+pic.filename),
-        ContentType: pic.mimetype,
-    
-    });
-    try {
-        const data = await s3Client.send(command);
-        const command2 = new GetObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: `upload/${pic.filename}`,
-        })
-        const url = await getSignedUrl(s3Client, command2)
-        req.image = url;
-        // res.send({ message: "Image uploaded successfully", url:url });
-    } catch (error) {
-        console.log("Error", error);
-        return res.status(500).send({ message: "Error in uploading image" });
-    }
-    next();
 
 }
 
