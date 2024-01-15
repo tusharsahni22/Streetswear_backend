@@ -18,7 +18,7 @@ const  addProductImage = async (req, res ,next) => {
     const { title } = JSON.parse(req.body.product);
     const key = "upload/"+title+"/"+mainPicture.filename;
     const AltPickey = "upload/"+title+"/"+AltPictures.filename;
-    let altPic1,altPic2;
+    let altPic1,altPic2,altPic3;
     // console.log(mainPicture)
     if (!mainPicture || !AltPictures) {
         res.status(400).send({ message: "Content can not be empty! Upload picture" });
@@ -55,12 +55,16 @@ const  addProductImage = async (req, res ,next) => {
             if(i==1){
                 altPic2 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
             }
+            if(i==2){
+                altPic3 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+            }
         }
         const cloudFrontURL = `https://d1ow83a3vk82qz.cloudfront.net/${key}`;
-        // All three links are ready to be saved in the the req.mainPicture, req.altPic1, req.altPic2
+        // All links are ready to be saved in the the req.mainPicture, req.altPic1, req.altPic2 ,req.altPic3
         req.mainPicture = cloudFrontURL;
         req.altPic1 = altPic1;
         req.altPic2 = altPic2;
+        req.altPic3 = altPic3;
         
     } catch (error) {
         console.log("Error", error);
@@ -72,15 +76,15 @@ const  addProductImage = async (req, res ,next) => {
 
 const addProduct = (req, res) => {
     const productdetail = JSON.parse(req.body.product);
-    const { title, price, size, description, specification, stock } = productdetail;
+    const { title, price, size, description, specification, stock ,category } = productdetail;
     const mainPicture = req.mainPicture;
-    const altPictures = [req.altPic1, req.altPic2];
-    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures) {
+    const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
+    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category) {
         res.status(400).send({ message: "Content can not be empty! Enter all details" });
         return;
     }
 
-    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, altPictures});
+    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, category , altPictures});
     product.save(product)
         .then(data => {
             res.send(data);
