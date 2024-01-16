@@ -17,14 +17,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    description:[{
-        type: String,
-        required: true,
-    }],
-    specification:{
+    description:{
         type: String,
         required: true,
     },
+    specification:[{
+        type: String,
+        required: true,
+    }],
     stock:[
         {
             type: Map,
