@@ -49,7 +49,12 @@ const productSchema = new mongoose.Schema({
     createdAt:{
         type: Date,
         default: Date.now,
-    }
+    },
+    colorToIndexMap:{
+        type: Map,
+        of: Number,
+        required: true,
+    },
     });
 
 module.exports = mongoose.model('Product', productSchema);

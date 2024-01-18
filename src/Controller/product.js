@@ -74,16 +74,16 @@ const  addProductImage = async (req, res ,next) => {
 
 const addProduct = (req, res) => {
     const productdetail = JSON.parse(req.body.product);
-    const { title, price, size, description, specification, stock ,category ,color } = productdetail;
+    const { title, price, size, description, specification, stock ,category ,color,colorToIndexMap } = productdetail;
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
-    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category || !color) {
+    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category || !color || !colorToIndexMap) {
         res.status(400).send({ message: "Content can not be empty! Enter all details" });
         return;
     }
 
  
-    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, category , color, altPictures});
+    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, category , color, altPictures, colorToIndexMap});
     product.save(product)
         .then(data => {
             res.send(data);
