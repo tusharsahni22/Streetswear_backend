@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
         {
             type: Map,
             of: Number,
-        required: true,
+            required: true,
         }
     ],
     altPictures: [
@@ -50,11 +50,11 @@ const productSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    colorToIndexMap:{
+    colorToIndexMap:[{
         type: Map,
         of: Number,
         required: true,
-    },
+    }],
     });
 
 module.exports = mongoose.model('Product', productSchema);

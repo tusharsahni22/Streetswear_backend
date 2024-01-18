@@ -78,7 +78,7 @@ const addProduct = (req, res) => {
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
     if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category || !color || !colorToIndexMap) {
-        res.status(400).send({ message: "Content can not be empty! Enter all details" });
+        res.status(400).send({ message: "Content can not be empty! Enter all details"});
         return;
     }
 
