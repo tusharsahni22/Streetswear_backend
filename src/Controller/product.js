@@ -1,6 +1,5 @@
 const productSchema = require('../Database/productSchema');
 const {S3Client, GetObjectCommand, PutObjectCommand}  = require('@aws-sdk/client-s3');
-// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const fs = require('fs');
 const { ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME } = process.env;
 const s3Client = new S3Client({
@@ -19,7 +18,6 @@ const  addProductImage = async (req, res ,next) => {
     const key = "upload/"+title+"/"+mainPicture.filename;
     const AltPickey = "upload/"+title+"/"+AltPictures.filename;
     let altPic1,altPic2,altPic3;
-    // console.log(mainPicture)
     if (!mainPicture || !AltPictures) {
         res.status(400).send({ message: "Content can not be empty! Upload picture" });
         return;
@@ -76,15 +74,16 @@ const  addProductImage = async (req, res ,next) => {
 
 const addProduct = (req, res) => {
     const productdetail = JSON.parse(req.body.product);
-    const { title, price, size, description, specification, stock ,category } = productdetail;
+    const { title, price, size, description, specification, stock ,category ,color } = productdetail;
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
-    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category) {
+    if (!title || !price || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category || !color) {
         res.status(400).send({ message: "Content can not be empty! Enter all details" });
         return;
     }
 
-    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, category , altPictures});
+ 
+    const product = new productSchema({ title, price, mainPicture, size, description, specification, stock, category , color, altPictures});
     product.save(product)
         .then(data => {
             res.send(data);

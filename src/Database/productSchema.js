@@ -21,14 +21,17 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    specification:{
+    specification:[{
         type: String,
         required: true,
-    },
-    stock:{
-        type: Number,
+    }],
+    stock:[
+        {
+            type: Map,
+            of: Number,
         required: true,
-    },
+        }
+    ],
     altPictures: [
         {
             type: String,
@@ -39,6 +42,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    color:[{
+        type: String,
+        required: true,
+    }],
+    createdAt:{
+        type: Date,
+        default: Date.now,
+    }
     });
 
 module.exports = mongoose.model('Product', productSchema);
