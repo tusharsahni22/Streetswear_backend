@@ -28,7 +28,7 @@ router.route('/login').post(login);
 
 // Routes for Product Page
 // router.route('/addProduct').post(addProduct);
-router.route('/viewProduct').put(viewProduct);
+router.route('/viewProduct').get(viewProduct);
 // router.route('/uploadnewproduct').post(upload.fields([{"pic"},{"altpicture",2}]),addProductImage,addProduct);
 router.route('/uploadnewproduct').post(upload.fields([{ name: 'pic', maxCount: 1 }, { name: 'altpicture', maxCount: 3 }]), addProductImage, addProduct);
 //protected routes for profile page
