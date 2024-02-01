@@ -4,6 +4,7 @@ const { signup, login } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile } = require('./Controller/UserProfile');
 const { addProduct, viewProduct,addProductImage } = require('./Controller/product');
+const { addOrder, getOrder, getOrderById, updateOrder } = require('./Controller/order');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -34,5 +35,12 @@ router.route('/uploadnewproduct').post(upload.fields([{ name: 'pic', maxCount: 1
 //protected routes for profile page
 router.route('/updateUser').post(authMiddleware,updateUserProfile);
 router.route('/getUser').get(authMiddleware,getUserProfile);
+// route for order page
+router.route('/orders').post(authMiddleware,addOrder);
+router.route('/orders').get(authMiddleware,getOrder);
+router.route('/orders/:id').get(authMiddleware,getOrderById);
+// router.route('/orders/:id').put(authMiddleware,updateOrder);
+// router.route('/orders/:id').delete(authMiddleware,deleteOrder);
+
 
 module.exports = router;
