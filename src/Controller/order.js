@@ -4,7 +4,7 @@ const Order = require("../Database/orderSchema"); // Assuming you have an Order 
 const productSchema = require('../Database/productSchema');
 
 let transporter = nodemailer.createTransport({
-    host: 'mail.privateemail.com',
+    host: 'streetswear.in',
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
@@ -39,15 +39,29 @@ const addOrder = async (req, res) => {
     try {
       const result = await order.save({session})
         // Send the order confirmation email
-        const populatedOrder = await Order.findById(result._id).populate('items.product');
+        const populatedOrder = await result.populate('items.product')
+        console.log(populatedOrder)
         let mailOptions = {
             from: 'orders@streetswear.in',
             to: 'tusharsahni22@gmail.com',
             subject: 'Order Confirmation',
-            text: `Thank you for your order! Your order details: ${JSON.stringify(populatedOrder)}`
-          };
+            html: `
+            <h1>Thank you for your order!</h1>
+            <p>Your order details:</p>
+            <ul>
+              ${populatedOrder.items.map(item => `
+                <li>
+                  <h2>${item.product.title}</h2>
+                  <p>Quantity: ${item.quantity}</p>
+                  <p>Price: ${item.product.price}</p>
+                </li>
+              `).join('')}
+            </ul>
+            <p>Total: ${populatedOrder.items.reduce((total, item) => total + item.quantity * item.product.price, 0)}</p>
+            <p>We will send you another email when your order has been shipped.</p>
+          `
+        };
           // Wrap sendMail in a Promiseonsole.log('Preparing to send email...');
-          console.log('Preparing to send email...');
 
 await new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (error, info) => {
