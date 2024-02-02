@@ -32,6 +32,15 @@ const orderSchema = new mongoose.Schema({
         enum: ['pending', 'shipped', 'delivered', 'cancelled'],
         default: 'pending'
     },
+    paymentMode: {
+        type: String,
+        enum: ['cash', 'credit', 'debit', 'paypal'],
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -44,8 +44,22 @@ const addOrder = async (req, res) => {
             from: 'orders@streetswear.in',
             to: 'tusharsahni22@gmail.com',
             subject: 'Order Confirmation',
-            text: `Thank you for your order! Your order details: ${JSON.stringify(populatedOrder)}`
-          };
+            html: `
+            <h1>Thank you for your order!</h1>
+            <p>Your order details:</p>
+            <ul>
+              ${populatedOrder.items.map(item => `
+                <li>
+                  <h2>${item.product.title}</h2>
+                  <p>Quantity: ${item.quantity}</p>
+                  <p>Price: ${item.product.price}</p>
+                </li>
+              `).join('')}
+            </ul>
+            <p>Total: ${populatedOrder.items.reduce((total, item) => total + item.quantity * item.product.price, 0)}</p>
+            <p>We will send you another email when your order has been shipped.</p>
+          `
+        };
           // Wrap sendMail in a Promiseonsole.log('Preparing to send email...');
 
 await new Promise((resolve, reject) => {
