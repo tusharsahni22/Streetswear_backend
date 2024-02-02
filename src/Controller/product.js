@@ -1,5 +1,6 @@
 const productSchema = require('../Database/productSchema');
-const {S3Client, GetObjectCommand, PutObjectCommand}  = require('@aws-sdk/client-s3');
+const Favorite = require('../Database/favorite');
+const {S3Client, PutObjectCommand}  = require('@aws-sdk/client-s3');
 const fs = require('fs');
 const { ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME } = process.env;
 const s3Client = new S3Client({
@@ -103,5 +104,36 @@ const viewProduct = (req, res) => {
         });
 
 }
+const addFavorite = (req, res) => {
+    const favorite = new Favorite({ user: req.user._id, product: req.body.productId });
+    favorite.save()
+        .then(data => {
+            res.send({message:"Product added to favorites successfully"});
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Some error occured while Adding" });
+        });
+}
 
-module.exports = { addProduct, viewProduct ,addProductImage};
+const removeFavorite = (req, res) => {
+    Favorite.deleteOne({ user: req.user._id, product: req.body.productId })
+        .then(data => {
+            res.send({message:"Product removed from favorites successfully"});
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Some error occured while Removing" });
+        });
+}
+const getFavorite = (req, res) => {
+    Favorite.find({ user: req.user._id }).populate('product').exec()
+        .then(data => {
+                res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Error Occured" });
+        });
+}
+    
+
+
+module.exports = { addProduct, viewProduct ,addProductImage,addFavorite,removeFavorite,getFavorite};

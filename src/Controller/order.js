@@ -4,7 +4,7 @@ const Order = require("../Database/orderSchema"); // Assuming you have an Order 
 const productSchema = require('../Database/productSchema');
 
 let transporter = nodemailer.createTransport({
-    host: 'mail.privateemail.com',
+    host: 'streetswear.in',
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
@@ -39,7 +39,7 @@ const addOrder = async (req, res) => {
     try {
       const result = await order.save({session})
         // Send the order confirmation email
-        const populatedOrder = await Order.findById(result._id).populate('items.product');
+        const populatedOrder = await result.populate('items.product');
         let mailOptions = {
             from: 'orders@streetswear.in',
             to: 'tusharsahni22@gmail.com',
@@ -47,7 +47,6 @@ const addOrder = async (req, res) => {
             text: `Thank you for your order! Your order details: ${JSON.stringify(populatedOrder)}`
           };
           // Wrap sendMail in a Promiseonsole.log('Preparing to send email...');
-          console.log('Preparing to send email...');
 
 await new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (error, info) => {
@@ -61,8 +60,6 @@ await new Promise((resolve, reject) => {
     });
   });
   
-  console.log('Email send attempt completed.');
-  
     await session.commitTransaction();
     session.endSession();
     res.status(201).send(result);
@@ -73,8 +70,6 @@ await new Promise((resolve, reject) => {
         res.status(500).send({ message: 'Error while adding order', Error: err });
     }
   };
-
-
 // Get all orders
 const getOrder= async (req, res) => {
     // find all order with the user id

@@ -15,6 +15,43 @@ const authSchema = new mongoose.Schema({
     },
     mobilenumber: {
         type: String
+    },
+    address: [{
+        houseNo: {
+            type: String,
+            required: true
+        },
+        locality: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        pincode: {
+            type: String,
+            required: true
+        },
+        phoneNo: {
+            type: String,
+            required: true
+        },
+        landmark: {
+            type: String
+        },
+        default: {
+            type: Boolean,
+            default: false
+        }
+
+    }],
+    dob: {
+        type: Date
     }
 });
 
