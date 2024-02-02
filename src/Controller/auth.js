@@ -65,4 +65,24 @@ const signup = async (req, res) => {
   }
 };
 
-module.exports = { login, signup };
+const changePassword = async (req, res) => {
+  const _id = req.user._id;
+  const { password } = req.body;
+
+  try {
+    // Find user by email
+    const user = await User.findOne({ _id });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.findOneAndUpdate({ _id }, { password: hashedPassword });
+    res.json({ message: 'Password changed successfully' });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
+module.exports = { login, signup ,changePassword };

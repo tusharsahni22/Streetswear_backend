@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const { signup, login } = require('./Controller/auth');
+const { signup,login,changePassword } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile } = require('./Controller/UserProfile');
 const { addProduct, viewProduct,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
@@ -26,15 +26,16 @@ router.get('/', (req, res) => {
 //auth routes
 router.route('/signup').post(signup);
 router.route('/login').post(login);
+router.route("/changePassword").post(authMiddleware,changePassword);
 
 // Routes for Product Page
-// router.route('/addProduct').post(addProduct);
 router.route('/viewProduct').get(viewProduct);
-// router.route('/uploadnewproduct').post(upload.fields([{"pic"},{"altpicture",2}]),addProductImage,addProduct);
 router.route('/uploadnewproduct').post(upload.fields([{ name: 'pic', maxCount: 1 }, { name: 'altpicture', maxCount: 3 }]), addProductImage, addProduct);
-//protected routes for profile page
+
+//protected routes for profile page with authMiddleware
 router.route('/updateProfile').post(authMiddleware,updateUserProfile);
 router.route('/getProfile').get(authMiddleware,getUserProfile);
+
 // route for order page
 router.route('/orders').post(authMiddleware,addOrder);
 router.route('/orders').get(authMiddleware,getOrder);

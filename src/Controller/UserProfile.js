@@ -3,10 +3,10 @@ const User = require('../Database/Auth');
 
 function updateUserProfile(req, res) {
   const { id } = req.user;
-  const { name, mobilenumber ,password ,dob,address } = req.body;
+  const { name, mobilenumber ,password ,dob,address,gender } = req.body;
   console.log(req.body);
  
-  User.findByIdAndUpdate(id, { name, mobilenumber ,password,dob,address }, { new: true })
+  User.findByIdAndUpdate(id, { name, mobilenumber,  password, dob, address, gender }, { new: true })
     .then((result) => {
       res.status(200).json({ message: 'User profile updated successfully'});
     })
