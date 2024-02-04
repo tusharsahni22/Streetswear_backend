@@ -20,11 +20,15 @@ const authSchema = new mongoose.Schema({
         type: String
     },
     address: [{
-        houseNo: {
+        name: {
             type: String,
             required: true
         },
-        locality: {
+        address: {
+            type: String,
+            required: true
+        },
+        landmark: {
             type: String,
             required: true
         },
