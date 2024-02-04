@@ -118,6 +118,7 @@ const addFavorite = (req, res) => {
 const removeFavorite = (req, res) => {
     Favorite.deleteOne({ user: req.user._id, product: req.body.productId })
         .then(data => {
+            console.log(data)
             res.send({message:"Product removed from favorites successfully"});
         })
         .catch(err => {
