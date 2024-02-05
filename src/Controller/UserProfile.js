@@ -14,6 +14,18 @@ function updateUserProfile(req, res) {
       res.status(500).json({ error: error.message });
     });
 }
+const removeAddress = (req, res) => {
+  const { id } = req.user;
+  const { addressId } = req.body;
+
+  User.findByIdAndUpdate(id, { $pull: { address: { _id: addressId } } }, { new: true })
+    .then((result) => {
+      res.status(200).json({ message: 'Address removed successfully' });
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
+  }
 
 const getUserProfile = (req, res) => {
   const { id } = req.user;
@@ -29,4 +41,4 @@ const getUserProfile = (req, res) => {
     });
 }
 
-module.exports = { updateUserProfile,getUserProfile};
+module.exports = { updateUserProfile,getUserProfile,removeAddresshb};
