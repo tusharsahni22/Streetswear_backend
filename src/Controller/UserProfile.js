@@ -3,7 +3,7 @@ const User = require('../Database/Auth');
 
 function updateUserProfile(req, res) {
   const { id } = req.user;
-  const { name, mobilenumber ,password ,dob,address,gender } = req.body;
+  const { name, mobilenumber ,password ,dob,gender } = req.body;
   console.log(req.body);
  
   User.findByIdAndUpdate(id, { name, mobilenumber,  password, dob, address, gender }, { new: true })
@@ -26,6 +26,18 @@ const removeAddress = (req, res) => {
       res.status(500).json({ error: error.message });
     });
   }
+const addAddress = (req, res) => {
+  const { id } = req.user;
+  const { address } = req.body;
+
+  User.findByIdAndUpdate(id, { $push: { address } }, { new: true })
+    .then((result) => {
+      res.status(200).json({ message: 'Address added successfully' });
+    })
+    .catch(error => {
+      res.status(500).json({ error: error.message });
+    });
+}
 
 const getUserProfile = (req, res) => {
   const { id } = req.user;
@@ -41,4 +53,4 @@ const getUserProfile = (req, res) => {
     });
 }
 
-module.exports = { updateUserProfile,getUserProfile,removeAddresshb};
+module.exports = { updateUserProfile,getUserProfile,removeAddress,addAddress};

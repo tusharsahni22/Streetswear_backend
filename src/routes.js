@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { signup,login,changePassword } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
-const { updateUserProfile, getUserProfile } = require('./Controller/UserProfile');
+const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('./Controller/UserProfile');
 const { addProduct, viewProduct,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
 const { addOrder, getOrder, getOrderById } = require('./Controller/order');
 
@@ -35,6 +35,8 @@ router.route('/uploadnewproduct').post(upload.fields([{ name: 'pic', maxCount: 1
 //protected routes for profile page with authMiddleware
 router.route('/updateProfile').post(authMiddleware,updateUserProfile);
 router.route('/getProfile').get(authMiddleware,getUserProfile);
+router.route("/removeAddress").post(authMiddleware,removeAddress);
+router.route("/addAddress").post(authMiddleware,addAddress);
 
 // route for order page
 router.route('/orders').post(authMiddleware,addOrder);
