@@ -6,7 +6,7 @@ function updateUserProfile(req, res) {
   const { name, mobilenumber ,password ,dob,gender } = req.body;
   console.log(req.body);
  
-  User.findByIdAndUpdate(id, { name, mobilenumber,  password, dob, address, gender }, { new: true })
+  User.findByIdAndUpdate(id, { name, mobilenumber,  password, dob, gender }, { new: true })
     .then((result) => {
       res.status(200).json({ message: 'User profile updated successfully'});
     })
