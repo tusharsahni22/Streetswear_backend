@@ -13,6 +13,9 @@ const s3Client = new S3Client({
 
 
 const  addProductImage = async (req, res ,next) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
     const mainPicture  = req.files["pic"][0];
     const AltPictures = req.files["altpicture"];
     const { title } = JSON.parse(req.body.product);
