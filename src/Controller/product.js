@@ -18,6 +18,7 @@ const  addProductImage = async (req, res ,next) => {
       }
     const mainPicture  = req.files["pic"][0];
     const AltPictures = req.files["altpicture"];
+    console.log("product",req.body.product);
     const { title } = JSON.parse(req.body.product);
     const key = "upload/"+title+"/"+mainPicture.filename;
     const AltPickey = "upload/"+title+"/"+AltPictures.filename;
