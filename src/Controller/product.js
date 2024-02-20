@@ -77,6 +77,7 @@ const  addProductImage = async (req, res ,next) => {
 }
 
 const addProduct = (req, res) => {
+    console.log("addProduct",req.body.product);
     const productdetail = JSON.parse(req.body.product);
     const { title, price, size, description, specification, stock ,category ,color,colorToIndexMap } = productdetail;
     const mainPicture = req.mainPicture;
