@@ -5,6 +5,7 @@ const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('./Controller/UserProfile');
 const { addProduct, viewProduct,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
 const { addOrder, getOrder, getOrderById } = require('./Controller/order');
+const {payments, paymentStatus}  = require("./Controller/payments")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -44,6 +45,9 @@ router.route('/orders').get(authMiddleware,getOrder);
 router.route('/orders/:id').get(authMiddleware,getOrderById);
 // router.route('/orders/:id').put(authMiddleware,updateOrder);
 // router.route('/orders/:id').delete(authMiddleware,deleteOrder);
+
+// route for payment page
+router.route('/payments').post(authMiddleware,payments);
 
 // favorite page
 router.route('/favorites').post(authMiddleware,addFavorite);

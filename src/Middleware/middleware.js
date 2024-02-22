@@ -3,8 +3,6 @@ const User = require('../Database/Auth');
 
 
 const authMiddleware = async (err,req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
   try {
     const token = req.header("Authorization").split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

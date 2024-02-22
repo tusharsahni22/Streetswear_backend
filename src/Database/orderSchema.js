@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const uuid = require('uuid');
+
 
 const orderItemSchema = new mongoose.Schema({
     product: {
@@ -41,6 +43,11 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    orderId:{
+        type: String,
+        required: true,
+    },
+
     createdAt: {
         type: Date,
         default: Date.now
