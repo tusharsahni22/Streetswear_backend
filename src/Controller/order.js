@@ -20,6 +20,7 @@ const addOrder = async (req, res) => {
     session.startTransaction();
     const order = new Order(req.body);
     const user = req.user;
+    console.log(user);
     order.user = user._id;
     // Fetch the product from the database
     for (let item of req.body.products) {

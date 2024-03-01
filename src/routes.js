@@ -6,6 +6,7 @@ const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('
 const { addProduct, viewProduct,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
 const { addOrder, getOrder, getOrderById } = require('./Controller/order');
 const {payments, paymentStatus}  = require("./Controller/payments")
+const {otpVerification,otpGenration} = require("./Controller/Otpverification")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -48,6 +49,10 @@ router.route('/orders/:id').get(authMiddleware,getOrderById);
 
 // route for payment page
 router.route('/payments').post(authMiddleware,payments);
+
+// route for otp verification
+router.route('/otp').post(otpGenration);
+router.route('/otpverification').post(otpVerification);
 
 // favorite page
 router.route('/favorites').post(authMiddleware,addFavorite);
