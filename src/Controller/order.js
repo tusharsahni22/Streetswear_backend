@@ -46,7 +46,7 @@ const addOrder = async (req, res) => {
         const populatedOrder = await result.populate('items.product');
         let mailOptions = {
             from: 'orders@streetswear.in',
-            to: 'tusharsahni22@gmail.com',
+            to: user.email, // Change to your email address
             subject: 'Order Confirmation',
             html: `
             <h1>Thank you for your order!</h1>
