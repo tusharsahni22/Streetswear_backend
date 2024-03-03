@@ -8,14 +8,23 @@ const orderItemSchema = new mongoose.Schema({
         ref: 'Product',
         required: true
     },
+    price: {
+        type: Number,
+        required: true
+    },
     quantity: {
         type: Number,
         required: true
     },
-    price: {
-        type: Number,
+    color: {
+        type: String,
+        required: true
+    },
+    size: {
+        type: String,
         required: true
     }
+
 });
 
 const orderSchema = new mongoose.Schema({
@@ -40,7 +49,34 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
     address: {
-        type: String,
+        address: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        landmark: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        phoneNo: {
+            type: String,
+            required: true
+        },
+        pincode: {
+            type: String,
+            required: true
+        },
+        state: {
+            type: String,
+            required: true
+        },
         required: true
     },
     orderId:{
