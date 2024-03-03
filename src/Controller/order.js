@@ -33,7 +33,9 @@ const addOrder = async (req, res) => {
         order.items.push({
           product: product._id,
           quantity: item.quantity,
-          price: product.price
+          price: product.price,
+          color: item.color,
+          size: item.size
         });
       }
     // Save the order
