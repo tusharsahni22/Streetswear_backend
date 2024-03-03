@@ -40,6 +40,7 @@ const addOrder = async (req, res) => {
       }
     // Save the order
     try {
+      console.log('Preparing to save order...', order);
       const result = await order.save({session})
         // Send the order confirmation email
         const populatedOrder = await result.populate('items.product');
