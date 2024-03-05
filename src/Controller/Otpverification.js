@@ -9,10 +9,6 @@ const otpGenration = async (req, res) => {
     const { phone } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000);
     console.log(otp);
-    const data = new OtpSchema({
-        phone: phone,
-        otp: otp
-    })
     await OtpSchema.findOneAndUpdate({ phone: phone }, { otp: otp }, { upsert: true })
 
     client.messages
@@ -33,7 +29,6 @@ const otpVerification = async (req, res) => {
                 console.log(data);
             })
             res.send("Otp verified successfully");
-            // detele the otp after verification
         }
         else {
             res.status(400).send("Otp verification failed");
