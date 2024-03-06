@@ -33,17 +33,20 @@ const addOrder = async (req, res) => {
         order.items.push({
           product: product._id,
           quantity: item.quantity,
-          price: product.price
+          price: product.price,
+          color: item.color,
+          size: item.size
         });
       }
     // Save the order
     try {
+      console.log('Preparing to save order...', order);
       const result = await order.save({session})
         // Send the order confirmation email
         const populatedOrder = await result.populate('items.product');
         let mailOptions = {
             from: 'orders@streetswear.in',
-            to: 'tusharsahni22@gmail.com',
+            to: user.email, // Change to your email address
             subject: 'Order Confirmation',
             html: `
             <h1>Thank you for your order!</h1>
