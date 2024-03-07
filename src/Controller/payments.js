@@ -9,10 +9,11 @@ const payments = (req, res) => {
   try {
     const merchantTransactionId = uuid.v4();
     const data = {
-      merchantId: process.env.MERCHANT_ID,
+      // merchantId: process.env.MERCHANT_ID,
+      merchantId: "PGTESTPAYUAT",
       merchantTransactionId: merchantTransactionId,
       merchantUserId: req.body.userId,
-    //   name: name,
+      name: name,
       amount: amount * 100,
       redirectUrl: `http://localhost:3000/api/status/${merchantTransactionId}`,
       redirectMode: "POST",
@@ -24,12 +25,13 @@ const payments = (req, res) => {
     const payload = JSON.stringify(data);
     const payloadMain = Buffer.from(payload).toString("base64");
     const keyIndex = 1;
-    const string = payloadMain + "/pg/v1/pay" + process.env.SALT_KEY;
+    // const string = payloadMain + "/pg/v1/pay" + process.env.SALT_KEY;
+    const string = payloadMain + "/pg/v1/pay" + "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
     const sha256 = crypto.createHash("sha256").update(string).digest("hex");
     const checksum = sha256 + "###" + keyIndex;
 
     // const prod_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
-    const prod_URL = "https://api-preprod.phonepe.com/apis/hermes";
+    const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
     const options = {
       method: "POST",
       url: prod_URL,
