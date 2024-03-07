@@ -53,16 +53,16 @@ const  addProductImage = async (req, res ,next) => {
             const dataAltPic = await s3Client.send(commandForAltPic);
             if(i==0){
 
-                altPic1 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+                altPic1 = `https://d2lwn8j9w6v60g.cloudfront.net/${AltPickey}`;
             }
             if(i==1){
-                altPic2 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+                altPic2 = `https://d2lwn8j9w6v60g.cloudfront.net/${AltPickey}`;
             }
             if(i==2){
-                altPic3 = `https://d1ow83a3vk82qz.cloudfront.net/${AltPickey}`;
+                altPic3 = `https://d2lwn8j9w6v60g.cloudfront.net/${AltPickey}`;
             }
         }
-        const cloudFrontURL = `https://d1ow83a3vk82qz.cloudfront.net/${key}`;
+        const cloudFrontURL = `https://d2lwn8j9w6v60g.cloudfront.net/${key}`;
         // All links are ready to be saved in the the req.mainPicture, req.altPic1, req.altPic2 ,req.altPic3
         req.mainPicture = cloudFrontURL;
         req.altPic1 = altPic1;
