@@ -62,19 +62,31 @@ const payments = (req, res) => {
 };
 
 const paymentStatus = (req, res) => {
-//   const { id } = req.params;
-//   axios.request(id).then(async(response) => {
-//     if (response.data.success === true) {
-//         const url = `http://localhost:3000/success`
-//         return res.redirect(url)
-//     } else {
-//         const url = `http://localhost:3000/failure`
-//         return res.redirect(url)
-//     }
-// })
-// .catch((error) => {
-//     console.error(error);
-// });
+  const merchantTransactionId = req.params.id;
+  const merchantId = "PGTESTPAYUAT";
+  
+  const options = {
+    method: 'GET',
+    url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,
+    headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-VERIFY': checksum,
+        'X-MERCHANT-ID': `${merchantId}`
+    }
+    };
+  axios.request(options).then(async(response) => {
+    if (response.data.success === true) {
+        const url = `http://localhost:3000/success`
+        return res.redirect(url)
+    } else {
+        const url = `http://localhost:3000/failure`
+        return res.redirect(url)
+    }
+})
+.catch((error) => {
+    console.error(error);
+});
   res.send("Payment Status");
 };
 
