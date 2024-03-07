@@ -80,6 +80,7 @@ const paymentStatus = (req, res) => {
     }
     };
   axios.request(options).then(async(response) => {
+    console.log(response.data);
     if (response.data.success === true) {
         const url = `http://localhost:3000/success`
         return res.redirect(url)
@@ -91,7 +92,6 @@ const paymentStatus = (req, res) => {
 .catch((error) => {
     console.error(error);
 });
-  res.send("Payment Status");
 };
 
 module.exports = { payments, paymentStatus };
