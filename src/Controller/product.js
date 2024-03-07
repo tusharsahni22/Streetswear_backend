@@ -78,11 +78,11 @@ const  addProductImage = async (req, res ,next) => {
 }
 
 const addProduct = (req, res) => {
-    console.log("addProduct",req.body.product);
     const productdetail = JSON.parse(req.body.product);
     const { title, price, priceAfterDiscount, size, description, specification, stock ,category ,color,colorToIndexMap } = productdetail;
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
+    console.log("productdetail",productdetail,mainPicture,altPictures);
     if (!title || !price || priceAfterDiscount || !mainPicture || !size || !description || !specification || !stock || !altPictures || !category || !color || !colorToIndexMap) {
         res.status(400).send({ message: "Content can not be empty! Enter all details"});
         return;
