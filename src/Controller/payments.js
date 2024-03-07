@@ -62,19 +62,20 @@ const payments = (req, res) => {
 };
 
 const paymentStatus = (req, res) => {
-  const { id } = req.params;
-  axios.request(id).then(async(response) => {
-    if (response.data.success === true) {
-        const url = `http://localhost:3000/success`
-        return res.redirect(url)
-    } else {
-        const url = `http://localhost:3000/failure`
-        return res.redirect(url)
-    }
-})
-.catch((error) => {
-    console.error(error);
-});
+//   const { id } = req.params;
+//   axios.request(id).then(async(response) => {
+//     if (response.data.success === true) {
+//         const url = `http://localhost:3000/success`
+//         return res.redirect(url)
+//     } else {
+//         const url = `http://localhost:3000/failure`
+//         return res.redirect(url)
+//     }
+// })
+// .catch((error) => {
+//     console.error(error);
+// });
+  res.send("Payment Status");
 };
 
 module.exports = { payments, paymentStatus };
