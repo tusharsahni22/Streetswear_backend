@@ -64,6 +64,10 @@ const payments = (req, res) => {
 const paymentStatus = (req, res) => {
   const merchantTransactionId = req.params.id;
   const merchantId = "PGTESTPAYUAT";
+    const keyIndex = 1;
+    const string = `/pg/v1/status/${merchantId}/${merchantTransactionId}` + salt_key;
+    const sha256 = crypto.createHash('sha256').update(string).digest('hex');
+    const checksum = sha256 + "###" + keyIndex;
   
   const options = {
     method: 'GET',
