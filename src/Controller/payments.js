@@ -49,9 +49,10 @@ const payments = (req, res) => {
       .request(options)
       .then(function (response) {
         console.log(response.data);
-        return res.redirect(
-          response.data.data.instrumentResponse.redirectInfo.url
-        );
+        // return res.redirect(
+        //   response.data.data.instrumentResponse.redirectInfo.url
+        // );
+        return res.status(200).send(response.data.data.instrumentResponse.redirectInfo.url);
       })
       .catch(function (error) {
         console.error(error);
