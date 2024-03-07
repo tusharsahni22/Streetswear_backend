@@ -15,9 +15,9 @@ const payments = (req, res) => {
       merchantUserId: req.body.userId,
       name: name,
       amount: amount * 100,
-      redirectUrl: `http://localhost:3000/api/status/${merchantTransactionId}`,
+      redirectUrl: `https://www.backend.streetswear.in/api/status/${merchantTransactionId}`,
       redirectMode: "POST",
-    //   mobileNumber: req.body.number,
+      mobileNumber: req.body.number,
       paymentInstrument: {
         type: "PAY_PAGE",
       },
@@ -48,10 +48,6 @@ const payments = (req, res) => {
     axios
       .request(options)
       .then(function (response) {
-        console.log(response.data);
-        // return res.redirect(
-        //   response.data.data.instrumentResponse.redirectInfo.url
-        // );
         return res.status(200).send(response.data.data.instrumentResponse.redirectInfo.url);
       })
       .catch(function (error) {
@@ -66,7 +62,19 @@ const payments = (req, res) => {
 };
 
 const paymentStatus = (req, res) => {
-  res.send("Hello from paymentStatus");
+  const { id } = req.params;
+  axios.request(id).then(async(response) => {
+    if (response.data.success === true) {
+        const url = `http://localhost:3000/success`
+        return res.redirect(url)
+    } else {
+        const url = `http://localhost:3000/failure`
+        return res.redirect(url)
+    }
+})
+.catch((error) => {
+    console.error(error);
+});
 };
 
 module.exports = { payments, paymentStatus };

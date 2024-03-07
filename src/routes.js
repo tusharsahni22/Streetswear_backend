@@ -49,6 +49,7 @@ router.route('/orders/:id').get(authMiddleware,getOrderById);
 
 // route for payment page
 router.route('/payments').post(authMiddleware,payments);
+router.route('/status/:id').post(paymentStatus);
 
 // route for otp verification
 router.route('/otp').post(otpGenration);
