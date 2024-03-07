@@ -82,7 +82,8 @@ const addProduct = (req, res) => {
     const { title, price, priceAfterDiscount, size, description, specification, stock ,category ,color,colorToIndexMap } = productdetail;
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
-    console.log("productdetail",productdetail,mainPicture,altPictures);
+
+    clg("product",title, price, priceAfterDiscount, size, description, specification, stock ,category ,color,colorToIndexMap,mainPicture,altPictures);
     if (!title || !price || priceAfterDiscount || !size || !description || !specification || !stock || !category || !color || !colorToIndexMap) {
         res.status(400).send({ message: "Content can not be empty! Enter all details"});
         return;
