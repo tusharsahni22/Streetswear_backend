@@ -13,7 +13,7 @@ const prepareOrder = async (userId,orderDetails) => {
   order.orderId =orderDetails.orderId; 
   order.user = userId;
     // Fetch the product from the database
-    for (let item of orderDetails.items) {
+    for (let item of orderDetails.products) {
         const product = await productSchema.findById(item.productId);
         // Check if the product exists
         if (!product) {
