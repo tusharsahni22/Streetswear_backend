@@ -1,20 +1,62 @@
 const uuid = require("uuid");
 const axios = require("axios");
 const crypto = require("crypto");
+const PendingOrders = require("../Database/PendingOrders");
+const productSchema = require('../Database/productSchema');
 require("dotenv").config();
 
+const prepareOrder = async (userId,orderDetails) => {
+  const order = new PendingOrders();
+  order.address = orderDetails.address;
+  order.total = orderDetails.total;
+  order.paymentMode = orderDetails.paymentMode;
+  order.orderId =orderDetails.orderId; 
+  order.user = userId;
+    // Fetch the product from the database
+    for (let item of orderDetails.items) {
+        const product = await productSchema.findById(item.productId);
+        // Check if the product exists
+        if (!product) {
+          return res.status(404).send({ error: 'Product not found', productId: item.productId });
+        }
+        // Add the product to the order
+        order.items.push({
+          product: product._id,
+          quantity: item.quantity,
+          price: product.price,
+          color: item.color,
+          size: item.size
+        });
+      }
+    // Save the order
+    try {
+      await order.save();
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 
-const payments = (req, res) => {
-    const {amount,name} = req.body;
-  try {
-    const merchantTransactionId = uuid.v4();
+const payments = async (req, res) => {
+    const { amount, name, orderId,orderDetails } = req.body; 
+    if (!amount || !name || !orderId || !orderDetails) {
+      return res.status(400).send({
+      message: "Missing required fields",
+      success: false,
+      });
+    }
+    const userId = req.user._id;
+    if (await prepareOrder(userId,orderDetails)==true) {
+     try {
+    const merchantTransactionId = orderId
     const data = {
       merchantId: process.env.MERCHANT_ID,
       merchantTransactionId: merchantTransactionId,
       merchantUserId: req.body.userId,
       name: name,
       amount: amount * 100,
-      redirectUrl: `https://www.backend.streetswear.in/api/status/${merchantTransactionId}`,
+      redirectUrl: `http://localhost:3000/api/status/${merchantTransactionId}`,
       redirectMode: "POST",
       mobileNumber: req.body.number,
       paymentInstrument: {
@@ -43,10 +85,10 @@ const payments = (req, res) => {
 
     axios
       .request(options)
-      .then(function (response) {
+      .then( (response)=> {
         return res.status(200).send(response.data.data.instrumentResponse.redirectInfo.url);
       })
-      .catch(function (error) {
+      .catch((error)=> {
         console.error(error);
       });
   } catch (error) {
@@ -55,6 +97,13 @@ const payments = (req, res) => {
       success: false,
     });
   }
+}
+else {
+  res.status(500).send({
+    message: "Error while preparing order",
+    success: false,
+  });
+}
 };
 
 const paymentStatus = (req, res) => {
@@ -76,9 +125,10 @@ const paymentStatus = (req, res) => {
     }
     };
   axios.request(options).then(async(response) => {
-    console.log(response.data);
+    // console.log(response.data);
+    // return res.status(200).send(response.data.success);
     if (response.data.success === true) {
-        const url = `http://localhost:3000/success`
+        const url = `http://streetswear.in/order/Processing-order/${merchantTransactionId}`
         return res.redirect(url)
     } else {
         const url = `http://localhost:3000/failure`
@@ -89,5 +139,4 @@ const paymentStatus = (req, res) => {
     console.error(error);
 });
 };
-
 module.exports = { payments, paymentStatus };

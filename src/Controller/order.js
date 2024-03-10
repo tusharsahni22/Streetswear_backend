@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
-const Order = require("../Database/orderSchema"); // Assuming you have an Order model defined
+const Order = require("../Database/orderSchema"); 
+const PendingOrders = require("../Database/PendingOrders");
 const productSchema = require('../Database/productSchema');
 
 let transporter = nodemailer.createTransport({
@@ -104,6 +105,11 @@ const getOrderById = async (req, res) => {
     res.send(order);
 };
 
+const pendingorders = async (req, res) => {
+    const order = await PendingOrders.findById(req.params.id).populate('items.product');
+    res.send(order);
+};
+
 // // Update an order
 // const updateOrder= async (req, res) => {
 //     const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -116,4 +122,4 @@ const getOrderById = async (req, res) => {
 //     res.status(204).send();
 // });
 
-module.exports = { addOrder, getOrder, getOrderById};
+module.exports = { addOrder, getOrder, getOrderById,pendingorders};
