@@ -126,7 +126,7 @@ const paymentStatus = (req, res) => {
     };
   axios.request(options).then(async(response) => {
     if (response.data.success === true) {
-        const url = "http://localhost:5713/order/Processing-order/"+`${merchantTransactionId}`
+        const url = "http://localhost:5173/order/Processing-order/"+`${merchantTransactionId}`
         return res.redirect(url)
     } else {
         const url = `http://localhost:3000/failure`

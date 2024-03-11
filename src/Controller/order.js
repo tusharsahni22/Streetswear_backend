@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Order = require("../Database/orderSchema"); 
 const PendingOrders = require("../Database/PendingOrders");
 const productSchema = require('../Database/productSchema');
+const axios = require('axios');
 
 let transporter = nodemailer.createTransport({
     host: 'streetswear.in',
@@ -111,6 +112,20 @@ const pendingorders = async (req, res) => {
     res.send(order);
 };
 
+const transferOrder = async (req,res)=> {
+  // Find the order in the PendingOrder collection
+  const pendingOrder = await PendingOrders.findOne({orderId:req.params.id});
+  console.log(pendingOrder);
+  if (!pendingOrder) {
+    res.status(404).send({ error: 'No pending order found' });
+    throw new Error(`No pending order found with id: ${req.params.id}`);
+  }
+  // Create a new order in the Order collection with the same data
+  const order = new Order(pendingOrder.toObject());
+  res.send(order);
+  
+}
+
 // // Update an order
 // const updateOrder= async (req, res) => {
 //     const order = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -123,4 +138,4 @@ const pendingorders = async (req, res) => {
 //     res.status(204).send();
 // });
 
-module.exports = { addOrder, getOrder, getOrderById,pendingorders};
+module.exports = { addOrder, getOrder, getOrderById,pendingorders,transferOrder};

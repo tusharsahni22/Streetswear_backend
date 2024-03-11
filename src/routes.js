@@ -4,7 +4,7 @@ const { signup,login,changePassword } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('./Controller/UserProfile');
 const { addProduct, viewProduct,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
-const { addOrder, getOrder, getOrderById ,pendingorders } = require('./Controller/order');
+const { addOrder, getOrder, getOrderById ,pendingorders,transferOrder } = require('./Controller/order');
 const {payments, paymentStatus}  = require("./Controller/payments")
 const {otpVerification,otpGenration} = require("./Controller/Otpverification")
 
@@ -45,6 +45,8 @@ router.route('/orders').post(authMiddleware,addOrder);
 router.route('/orders').get(authMiddleware,getOrder);
 router.route('/orders/:id').get(authMiddleware,getOrderById);
 router.route('/pendingorders/:id').get(authMiddleware,pendingorders);
+router.route('/transferorder/:id').get(authMiddleware,transferOrder);
+
 // router.route('/orders/:id').put(authMiddleware,updateOrder);
 // router.route('/orders/:id').delete(authMiddleware,deleteOrder);
 
