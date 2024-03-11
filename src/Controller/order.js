@@ -106,7 +106,8 @@ const getOrderById = async (req, res) => {
 };
 
 const pendingorders = async (req, res) => {
-    const order = await PendingOrders.findById(req.params.id).populate('items.product');
+  console.log(req.params.id);
+    const order = await PendingOrders.find({orderId:req.params.id}).populate('items.product');
     res.send(order);
 };
 

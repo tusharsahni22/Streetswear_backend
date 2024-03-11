@@ -39,8 +39,8 @@ const prepareOrder = async (userId,orderDetails) => {
   }
 
 const payments = async (req, res) => {
-    const { amount, name, orderId,orderDetails } = req.body; 
-    if (!amount || !name || !orderId || !orderDetails) {
+    const { amount, name,orderDetails } = req.body; 
+    if (!amount || !name || !orderDetails) {
       return res.status(400).send({
       message: "Missing required fields",
       success: false,
@@ -49,7 +49,7 @@ const payments = async (req, res) => {
     const userId = req.user._id;
     if (await prepareOrder(userId,orderDetails)==true) {
      try {
-    const merchantTransactionId = orderId
+    const merchantTransactionId = orderDetails.orderId;
     const data = {
       merchantId: process.env.MERCHANT_ID,
       merchantTransactionId: merchantTransactionId,
@@ -125,10 +125,8 @@ const paymentStatus = (req, res) => {
     }
     };
   axios.request(options).then(async(response) => {
-    // console.log(response.data);
-    // return res.status(200).send(response.data.success);
     if (response.data.success === true) {
-        const url = `http://streetswear.in/order/Processing-order/${merchantTransactionId}`
+        const url = "http://localhost:5713/order/Processing-order/"+`${merchantTransactionId}`
         return res.redirect(url)
     } else {
         const url = `http://localhost:3000/failure`
