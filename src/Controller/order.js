@@ -120,10 +120,12 @@ const transferOrder = async (req,res)=> {
     res.status(404).send({ error: 'No pending order found' });
     throw new Error(`No pending order found with id: ${req.params.id}`);
   }
-  // Create a new order in the Order collection with the same data
   const order = new Order(pendingOrder.toObject());
-  res.send(order);
-  
+  const orderObject = order.toObject();
+  orderObject.products = orderObject.items;
+  delete orderObject.items;
+
+res.send(orderObject);  
 }
 
 // // Update an order
