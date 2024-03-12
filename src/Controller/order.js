@@ -22,14 +22,13 @@ const addOrder = async (req, res) => {
     session.startTransaction();
     const order = new Order(req.body);
     const user = req.user;
-    console.log(user);
     order.user = user._id;
     // Fetch the product from the database
     for (let item of req.body.products) {
-        const product = await productSchema.findById(item.productId);
+        const product = await productSchema.findById(item.product);
         // Check if the product exists
         if (!product) {
-          return res.status(404).send({ error: 'Product not found', productId: item.productId });
+          return res.status(404).send({ error: 'Product not found', productId: item.product});
         }
         // Add the product to the order
         order.items.push({
@@ -42,7 +41,7 @@ const addOrder = async (req, res) => {
       }
     // Save the order
     try {
-      console.log('Preparing to save order...', order);
+      console.log('Preparing to save order...');
       const result = await order.save({session})
         // Send the order confirmation email
         const populatedOrder = await result.populate('items.product');
