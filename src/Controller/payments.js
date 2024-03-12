@@ -14,7 +14,7 @@ const prepareOrder = async (userId,orderDetails) => {
   order.user = userId;
     // Fetch the product from the database
     for (let item of orderDetails.products) {
-        const product = await productSchema.findById(item.productId);
+        const product = await productSchema.findById(item.product);
         // Check if the product exists
         if (!product) {
           return res.status(404).send({ error: 'Product not found', productId: item.productId });
