@@ -56,7 +56,7 @@ const payments = async (req, res) => {
       merchantUserId: req.body.userId,
       name: name,
       amount: amount * 100,
-      redirectUrl: `http://localhost:3000/api/status/${merchantTransactionId}`,
+      redirectUrl: `https://backend.streetswear.in/api/status/${merchantTransactionId}`,
       redirectMode: "POST",
       mobileNumber: req.body.number,
       paymentInstrument: {
