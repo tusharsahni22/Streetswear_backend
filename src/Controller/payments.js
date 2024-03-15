@@ -53,7 +53,7 @@ const payments = async (req, res) => {
     const data = {
       merchantId: process.env.MERCHANT_ID,
       merchantTransactionId: merchantTransactionId,
-      merchantUserId: req.body.userId,
+      merchantUserId: userId,
       name: name,
       amount: amount * 100,
       redirectUrl: `https://backend.streetswear.in/api/status/${merchantTransactionId}`,
@@ -69,7 +69,7 @@ const payments = async (req, res) => {
     const string = payloadMain + "/pg/v1/pay" + process.env.SALT_KEY;
     const sha256 = crypto.createHash("sha256").update(string).digest("hex");
     const checksum = sha256 + "###" + keyIndex;
-    const prod_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay";
+    const prod_URL = process.env.PROD_URL_PG;
     const options = {
       method: "POST",
       url: prod_URL,
@@ -116,7 +116,7 @@ const paymentStatus = (req, res) => {
   
   const options = {
     method: 'GET',
-    url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,
+    url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`,
     headers: {
         accept: 'application/json',
         'Content-Type': 'application/json',
