@@ -36,9 +36,9 @@ const login = async (req, res) => {
 
 // Signup API function
 const signup = async (req, res) => {
-  const { email, password,name,phoneNo } = req.body;
+  const { email, password,name,mobilenumber } = req.body;
 
-  if (!email || !password || !name || !phoneNo) {
+  if (!email || !password || !name || !mobilenumber) {
     return res.status(400).json({ message: 'Please enter all fields' });
   }
 
@@ -51,7 +51,7 @@ const signup = async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const existingPhone = await User.findOne({phoneNo});
+    const existingPhone = await User.findOne({mobilenumber});
     if(existingPhone){
       return res.status(400).json({ message: 'Phone number already exists' });
     }
@@ -59,7 +59,7 @@ const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create new user
-    const user = new User({email, password: hashedPassword ,name,phoneNo });
+    const user = new User({email, password: hashedPassword ,name,mobilenumber });
     await user.save();
 
     // Create JWT token

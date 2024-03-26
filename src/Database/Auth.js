@@ -61,11 +61,6 @@ const authSchema = new mongoose.Schema({
     dob: {
         type: Date
     },
-
-    phoneNo: {
-        type: String,
-        required: true
-    }
 });
 
 const Auth = mongoose.model('Auth', authSchema);
