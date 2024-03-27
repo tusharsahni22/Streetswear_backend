@@ -86,9 +86,7 @@ const addOrder = async (req, res) => {
                             <p>Quantity: ${item.quantity}</p>
                             <p>Price: ${item.product.price}</p>
                           </li>
-                        `
-                          )
-                          .join("")}
+                        `).join("")}
                       </ul>
                       <p>Total: ${populatedOrder.items.reduce(
                         (total, item) =>
