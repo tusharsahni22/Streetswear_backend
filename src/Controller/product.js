@@ -109,6 +109,21 @@ const viewProduct = (req, res) => {
         });
 
 }
+
+const viewProductById = (req, res) => {
+    const ProductId = req.params.id;
+    if (!ProductId) {
+        return res.status(400).send({ message: "Product Id cannot be Null!" });
+    }
+    productSchema.findById(ProductId)
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Error Occured" });
+        });
+
+}
 const addFavorite = (req, res) => {
     const favorite = new Favorite({ user: req.user._id, product: req.body.productId });
     favorite.save()
@@ -143,4 +158,4 @@ const getFavorite = (req, res) => {
     
 
 
-module.exports = { addProduct, viewProduct ,addProductImage,addFavorite,removeFavorite,getFavorite};
+module.exports = { addProduct, viewProduct ,viewProductById ,addProductImage,addFavorite,removeFavorite,getFavorite};
