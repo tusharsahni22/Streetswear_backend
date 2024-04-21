@@ -3,7 +3,7 @@ const multer = require('multer');
 const { signup,login,changePassword } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('./Controller/UserProfile');
-const { addProduct, viewProduct,viewProductById,addProductImage ,addFavorite,removeFavorite,getFavorite } = require('./Controller/product');
+const { addProduct, viewProduct,viewProductById,addProductImage ,addFavorite,removeFavorite,getFavorite,makePromocode,applyPromoCode } = require('./Controller/product');
 const { addOrder, getOrder, getOrderById ,pendingorders,transferOrder } = require('./Controller/order');
 const {payments, paymentStatus}  = require("./Controller/payments")
 const {otpVerification,otpGenration} = require("./Controller/Otpverification")
@@ -54,6 +54,10 @@ router.route('/transferorder/:id').get(authMiddleware,transferOrder);
 // route for payment page
 router.route('/payments').post(authMiddleware,payments);
 router.route('/status/:id').post(paymentStatus);
+
+// routes for promocode
+router.route('/applyPromoCode').post(authMiddleware,applyPromoCode);
+router.route('/makePromocode').post(authMiddleware,makePromocode);
 
 // route for otp verification
 router.route('/otp').post(otpGenration);

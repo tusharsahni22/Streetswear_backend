@@ -1,5 +1,6 @@
 const productSchema = require('../Database/productSchema');
 const Favorite = require('../Database/favorite');
+const PromoCode = require('../Database/promocode');
 const {S3Client, PutObjectCommand}  = require('@aws-sdk/client-s3');
 const fs = require('fs');
 const { ACCESS_KEY_ID, SECRET_ACCESS_KEY, BUCKET_NAME } = process.env;
@@ -155,7 +156,49 @@ const getFavorite = (req, res) => {
             res.status(500).send({ message: err.message || "Error Occured" });
         });
 }
+
+const applyPromoCode = async (req, res) => {
+    const { code } = req.body;
+
+    try {
+        const promoCode = await PromoCode.findOne({ code });
+
+        if (!promoCode) {
+            return res.status(404).json({ message: 'Promo code not found' });
+        }
+
+        if (promoCode.expiryDate < new Date()) {
+            return res.status(400).json({ message: 'Promo code has expired' });
+        }
+
+        let flatDiscount = promoCode.flatDiscount;
+        let percentDiscout = promoCode.percentDiscount;
+
+        res.json({ flatDiscount, percentDiscout});
+
+    } catch (err) {
+        res.status(500).json({ message: 'An error occurred' });
+    }
+}
+
+const makePromocode = (req, res) => {
+    const { code, flatDiscount, percentDiscount, expiryDate } = req.body;
+
+    if (!code || !expiryDate) {
+        return res.status(400).json({ message: 'Code and expiry date are required' });
+    }
+
+    const promoCode = new PromoCode({ code, flatDiscount, percentDiscount, expiryDate });
+
+    promoCode.save()
+        .then(data => {
+            res.json(data);
+        })
+        .catch(err => {
+            res.status(500).json({ message: 'An error occurred' });
+        });
+}
     
 
 
-module.exports = { addProduct, viewProduct ,viewProductById ,addProductImage,addFavorite,removeFavorite,getFavorite};
+module.exports = { addProduct, viewProduct ,viewProductById ,addProductImage,addFavorite,removeFavorite,getFavorite,applyPromoCode,makePromocode};
