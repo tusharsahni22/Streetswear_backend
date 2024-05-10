@@ -3,7 +3,7 @@ const multer = require('multer');
 const { signup,login,changePassword } = require('./Controller/auth');
 const authMiddleware = require('./Middleware/middleware');
 const { updateUserProfile, getUserProfile,removeAddress,addAddress } = require('./Controller/UserProfile');
-const { addProduct, viewProduct,viewProductById,addProductImage ,addFavorite,removeFavorite,getFavorite,makePromocode,applyPromoCode } = require('./Controller/product');
+const { addProduct, viewProduct,viewProductById,viewLimitedProduct,addProductImage ,addFavorite,removeFavorite,getFavorite,makePromocode,applyPromoCode } = require('./Controller/product');
 const { addOrder, getOrder, getOrderById ,pendingorders,transferOrder } = require('./Controller/order');
 const {payments, paymentStatus}  = require("./Controller/payments")
 const {otpVerification,otpGenration} = require("./Controller/Otpverification")
@@ -33,6 +33,7 @@ router.route("/changePassword").post(authMiddleware,changePassword);
 // Routes for Product Page
 router.route('/viewProduct').get(viewProduct);
 router.route('/viewProduct/:id').get(viewProductById);
+router.route('/viewLimitedProduct/').get(viewLimitedProduct);
 router.route('/uploadnewproduct').post(upload.fields([{ name: 'pic', maxCount: 1 }, { name: 'altpicture', maxCount: 3 }]), addProductImage, addProduct);
 
 //protected routes for profile page with authMiddleware

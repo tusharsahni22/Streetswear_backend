@@ -80,7 +80,7 @@ const  addProductImage = async (req, res ,next) => {
 
 const addProduct = (req, res) => {
     const productdetail = JSON.parse(req.body.product);
-    const { title, price, priceAfterDiscount, size, description, specification, stock ,category ,color,colorToIndexMap } = productdetail;
+    const { title, price, priceAfterDiscount, size, description, specification, stock ,category ,color,colorToIndexMap,limitedEdition } = productdetail;
     const mainPicture = req.mainPicture;
     const altPictures = [req.altPic1, req.altPic2 ,req.altPic3];
     
@@ -90,7 +90,7 @@ const addProduct = (req, res) => {
     }
 
  
-    const product = new productSchema({ title, price, priceAfterDiscount, mainPicture, size, description, specification, stock, category , color, altPictures, colorToIndexMap});
+    const product = new productSchema({ title, price, priceAfterDiscount, mainPicture, size, description, specification, stock, category , color, altPictures, colorToIndexMap,limitedEdition});
     product.save(product)
         .then(data => {
             res.send(data);
@@ -118,6 +118,17 @@ const viewProductById = (req, res) => {
     }
     productSchema.findById(ProductId)
         .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({ message: err.message || "Error Occured" });
+        });
+
+}
+const viewLimitedProduct = (req, res) => {
+    productSchema.find({"limitedEdition":true})
+        .then(data => {
+            console.log("first",data)
             res.send(data);
         })
         .catch(err => {
@@ -161,7 +172,7 @@ const applyPromoCode = async (req, res) => {
     const { code } = req.body;
 
     try {
-        const promoCode = await PromoCode.findOne({ code });
+        const promoCode = await PromoCode.findOne({ code:code.toLowerCase()});
 
         if (!promoCode) {
             return res.status(404).json({ message: 'Promo code not found' });
@@ -188,7 +199,7 @@ const makePromocode = (req, res) => {
         return res.status(400).json({ message: 'Code and expiry date are required' });
     }
 
-    const promoCode = new PromoCode({ code, flatDiscount, percentDiscount, expiryDate });
+    const promoCode = new PromoCode({ code:code.toLowerCase(), flatDiscount, percentDiscount, expiryDate });
 
     promoCode.save()
         .then(data => {
@@ -201,4 +212,4 @@ const makePromocode = (req, res) => {
     
 
 
-module.exports = { addProduct, viewProduct ,viewProductById ,addProductImage,addFavorite,removeFavorite,getFavorite,applyPromoCode,makePromocode};
+module.exports = { addProduct, viewProduct ,viewProductById ,viewLimitedProduct ,addProductImage,addFavorite,removeFavorite,getFavorite,applyPromoCode,makePromocode};

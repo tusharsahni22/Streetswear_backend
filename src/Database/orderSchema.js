@@ -38,9 +38,6 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    saving: {
-        type: Number,
-    },
     status: {
         type: String,
         enum: ['pending', 'shipped', 'delivered', 'cancelled'],
@@ -86,6 +83,14 @@ const orderSchema = new mongoose.Schema({
         required: true,
     },
 
+    promocode: {
+        type: String
+    },
+    
+    saving: {
+        type: Number,
+    },
+    
     createdAt: {
         type: Date,
         default: Date.now
